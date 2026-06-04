@@ -1,0 +1,28 @@
+# 테라폼 로컬 데이터 및 플러그인 캐시
+.terraform/
+.terraform.lock.hcl
+
+# 테라폼 상태 파일 (가장 중요! 배포 정보와 민감한 패스워드가 평문으로 들어있음)
+*.tfstate
+*.tfstate.*
+
+# 로컬 개발 및 테스트용 변수 파일 (여기에 DB 비번이나 AWS 키를 적어두고 쓸 것이므로 커밋 방지)
+*.tfvars
+*.tfvars.json
+*.tfbackend
+
+# 크래시 로그 및 개인 설정 파일
+crash.log
+*.crash.log
+.env
+.env.*
+
+# 운영체제 및 IDE 환경 파일
+.DS_Store
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
