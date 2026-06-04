@@ -1,1 +1,62 @@
 # Base: Chat Deployment + Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-service
+  labels:
+    app: chat
+spec:
+  selector:
+    matchLabels:
+      app: chat
+  template:
+    metadata:
+      labels:
+        app: chat
+    spec:
+      containers:
+      - name: chat-service
+        image: officetalk-chat:latest
+        ports:
+        - containerPort: 8081
+          name: websocket
+        envFrom:
+        - configMapRef:
+            name: officetalk-env
+        - secretRef:
+            name: officetalk-db-secret
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-service
+  labels:
+    app: chat
+spec:
+  ports:
+  - port: 8081
+    targetPort: 8081
+    protocol: TCP
+    name: websocket
+  selector:
+    app: chat
+  type: ClusterIP

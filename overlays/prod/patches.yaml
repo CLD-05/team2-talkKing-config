@@ -1,1 +1,39 @@
 # prod Patches (Image tags, replicas, resource overrides)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  namespace: officetalk-prod
+spec:
+  template:
+    spec:
+      # 운영 환경 Pod 간 Multi-AZ 균등 분산을 위한 토폴로지 제약 추가
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfied: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: auth
+      containers:
+      - name: auth-service
+        image: xxxxxxxxxxxx.dkr.ecr.ap-northeast-2.amazonaws.com/officetalk-auth:prod-stable # 운영 고정 이미지 태그
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-service
+  namespace: officetalk-prod
+spec:
+  template:
+    spec:
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfied: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: chat
+      containers:
+      - name: chat-service
+        image: xxxxxxxxxxxx.dkr.ecr.ap-northeast-2.amazonaws.com/officetalk-chat:prod-stable

@@ -1,1 +1,14 @@
 # prod ConfigMap Environment Variables
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: officetalk-env
+  namespace: officetalk-prod
+data:
+  SPRING_PROFILES_ACTIVE: prod
+  SERVER_PORT_AUTH: "8080"
+  SERVER_PORT_CHAT: "8081"
+  # prod 인프라 레이어(테라폼)에서 생성된 Multi-AZ 클러스터 주소를 매핑합니다.
+  DB_URL: "jdbc:mysql://teamn-prod-db-cluster.xxxxxx.ap-northeast-2.rds.amazonaws.com:3306/officetalk"
+  REDIS_HOST: "teamn-prod-redis-cluster.xxxxxx.clustercfg.ap-northeast-2.cache.amazonaws.com"
+  KAFKA_BOOTSTRAP_SERVERS: "teamn-prod-msk-broker1.xxxxxx.ap-northeast-2.amazonaws.com:9092,teamn-prod-msk-broker2.xxxxxx.ap-northeast-2.amazonaws.com:9092"

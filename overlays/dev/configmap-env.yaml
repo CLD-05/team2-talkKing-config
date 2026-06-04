@@ -1,1 +1,14 @@
 # dev ConfigMap Environment Variables
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: officetalk-env
+  namespace: officetalk-dev
+data:
+  SPRING_PROFILES_ACTIVE: dev
+  SERVER_PORT_AUTH: "8080"
+  SERVER_PORT_CHAT: "8081"
+  # 인프라 레이어 테라폼에서 생성된 엔드포인트들을 여기에 기재합니다. (임시주소)
+  DB_URL: "jdbc:mysql://teamn-dev-db.xxxxxx.ap-northeast-2.rds.amazonaws.com:3306/officetalk"
+  REDIS_HOST: "teamn-dev-redis.xxxxxx.ng.0001.ap-northeast-2.cache.amazonaws.com"
+  KAFKA_BOOTSTRAP_SERVERS: "teamn-dev-kafka.xxxxxx.ap-northeast-2.amazonaws.com:9092"

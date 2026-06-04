@@ -1,1 +1,39 @@
 # dev Ingress (AWS ALB)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: officetalk-dev-ingress
+  namespace: officetalk-dev
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    # dev 환경 도메인이 승인되면 ACM 인증서 ARN을 연동합니다.
+    # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:xxxx:certificate/xxxx
+    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/v1/auth
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 8080
+      - path: /ws
+        pathType: Prefix
+        backend:
+          service:
+            name: chat-service
+            port:
+              number: 8081
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
