@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-service
+spec:
+  template:
+    spec:
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfied: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: frontend
+      containers:
+      - name: frontend
+        image: xxxxxxxxxxxx.dkr.ecr.ap-northeast-2.amazonaws.com/talkking-frontend:prod-stable

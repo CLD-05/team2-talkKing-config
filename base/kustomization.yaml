@@ -1,9 +1,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+# 💡 1. 프로젝트 전체 자원을 쉽게 필터링하고 모니터링하기 위한 공통 라벨 자동 주입
+commonLabels:
+  project: talkking
+
+# 이 베이스 팩에 포함될 마이크로서비스 리소스 목록
 resources:
   - frontend-service.yaml
   - auth-service.yaml
   - chat-service.yaml
-
-  # 추후에 추가될 나머지 2개 서비스(notification, ai)도 여기에 리스트로 이어 붙이면 됩니다.
+  
+  # 💡 2. 일관된 네이밍 규칙(서비스명-service.yaml) 가이드 주석 정돈
+  # 추후 서비스 확장 시 아래 파일들을 생성하고 리스트에 추가하면 됩니다.
+  # - notification-service.yaml
+  # - ai-service.yaml

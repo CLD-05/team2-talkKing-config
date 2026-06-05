@@ -6,6 +6,12 @@ metadata:
   labels:
     app: chat
 spec:
+  # 💡 무중단 Rolling Update 전략 명시
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%         # 새 버전 파드를 먼저 25% 더 띄우고 안정화되면 교체
+      maxUnavailable: 0%    # 배포 중 기존 파드가 죽어서 전체 서비스에 공백이 생기지 않도록 차단
   selector:
     matchLabels:
       app: chat
@@ -16,15 +22,15 @@ spec:
     spec:
       containers:
       - name: chat-service
-        image: officetalk-chat:latest
+        image: talkking-chat:latest
         ports:
         - containerPort: 8081
           name: websocket
         envFrom:
         - configMapRef:
-            name: officetalk-env
+            name: talkking-env
         - secretRef:
-            name: officetalk-db-secret
+            name: talkking-db-secret
         resources:
           requests:
             cpu: "250m"
@@ -32,18 +38,24 @@ spec:
           limits:
             cpu: "500m"
             memory: "1Gi"
+        # 💡 프로브 설정 고도화
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
             port: 8081
-          initialDelaySeconds: 60
+          initialDelaySeconds: 40  # 부팅 시간을 현실적으로 조절
           periodSeconds: 10
+          timeoutSeconds: 2        # 타임아웃 추가로 네트워크 지연 예외 처리
+          failureThreshold: 3      # 3번 연속 실패 시에만 데드락으로 판단하고 재시작
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8081
-          initialDelaySeconds: 60
+          initialDelaySeconds: 40
           periodSeconds: 10
+          timeoutSeconds: 2
+          successThreshold: 1      # 1번만 성공해도 트래픽 즉시 투입
+          failureThreshold: 3      # 연속 실패 시 서비스 로드밸런서에서 즉시 격리
 ---
 apiVersion: v1
 kind: Service
@@ -53,8 +65,8 @@ metadata:
     app: chat
 spec:
   ports:
-  - port: 8081
-    targetPort: 8081
+  - port: 80               # 💡 서비스 외부 노출 포트는 80으로 열어두는 것이 나중에 인프라(Ingress 등) 연동할 때 훨씬 직관적입니다.
+    targetPort: 8081       # 컨테이너의 내부 포트와 정확히 연결
     protocol: TCP
     name: websocket
   selector:
