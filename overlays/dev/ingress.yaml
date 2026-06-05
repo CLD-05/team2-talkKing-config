@@ -8,6 +8,10 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=3600
+
+    # 🎯 [웹소켓 필수] 다중 파드 환경에서 웹소켓 세션이 찢어지지 않도록 고정
+    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.type=lb_cookie,stickiness.lb_cookie.duration_seconds=86400
     # dev 환경 도메인이 승인되면 ACM 인증서 ARN을 연동합니다.
     # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:xxxx:certificate/xxxx
     # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
