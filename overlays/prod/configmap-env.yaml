@@ -1,1 +1,19 @@
 # prod ConfigMap Environment Variables
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: officetalk-env
+  namespace: officetalk-prod
+data:
+
+#운영 프로파일 강제 (운영 DB 전용 최적화 커넥션 풀 활성화용)
+SPRING_PROFILES_ACTIVE: prod
+
+#스프링 부트 표준 운영 DB(Multi-AZ) 주소 매핑
+SPRING_DATASOURCE_URL: "jdbc:mysql://teamn-prod-db-cluster.xxxxxx.ap-northeast-2.rds.amazonaws.com:3306/officetalk?serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
+
+#[운영 환경 특화] AWS ElastiCache 레디스 '클러스터' 전용 환경 변수로 전환
+SPRING_DATA_REDIS_CLUSTER_NODES: "teamn-prod-redis-cluster.xxxxxx.clustercfg.ap-northeast-2.cache.amazonaws.com:6379"
+
+#AWS MSK(Managed Kafka) 멀티 브로커 엔드포인트 완벽 동기화
+SPRING_KAFKA_BOOTSTRAP_SERVERS: "teamn-prod-msk-broker1.xxxxxx.ap-northeast-2.amazonaws.com:9092,teamn-prod-msk-broker2.xxxxxx.ap-northeast-2.amazonaws.com:9092"

@@ -5,3 +5,5 @@ resources:
   - frontend-service.yaml
   - auth-service.yaml
   - chat-service.yaml
+
+  # 추후에 추가될 나머지 2개 서비스(notification, ai)도 여기에 리스트로 이어 붙이면 됩니다.
