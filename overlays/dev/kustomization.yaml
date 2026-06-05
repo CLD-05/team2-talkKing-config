@@ -1,18 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-# 💡 1. 프로젝트 이름 규칙에 맞게 개발 환경 네임스페이스 수정
 namespace: talkking-dev
 
-# 뼈대 자원(base)과 현재 개발 환경 폴더에 있는 리소스들을 조립합니다.
 resources:
   - ../../base
-  # 💡 2. 가독성을 위해 현재 폴더의 파일명 경로 포맷 정돈
-  - configmap-env.yaml
-  - externalsecret-db.yaml
-  - ingress.yaml
-  - hpa-rules.yaml
-
-# 각 서비스별 이미지 태그나 복제본 수 등을 미세 조정할 패치 파일 연결
-patches:
-  - path: patches.yaml
+  - global-config.yaml
+  - middleware-endpoints.yaml
+  - credential-secrets.yaml
+  - network-ingress.yaml
+  - services/auth/deployment-hpa.yaml
+  - services/chat/deployment-hpa.yaml
+  - services/frontend/deployment-hpa.yaml

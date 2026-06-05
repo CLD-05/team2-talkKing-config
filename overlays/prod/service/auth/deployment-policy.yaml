@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  template:
+    spec:
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfied: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: auth
+      containers:
+      - name: auth-service
+        image: xxxxxxxxxxxx.dkr.ecr.ap-northeast-2.amazonaws.com/talkking-auth:prod-stable

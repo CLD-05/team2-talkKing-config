@@ -1,15 +1,29 @@
-# prod KEDA Event-driven AutoScaling Rules - Notification Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+spec:
+  template:
+    spec:
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfied: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: notification
+---
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: notification-service-keda
-  namespace: talkking-prod # 💡 2. 네임스페이스 talkking 통일
+  namespace: talkking-prod
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: notification-service
-  minReplicas: 2 # prod 환경 최소 가용성 확보를 위해 2개로 시작
+  minReplicas: 2
   maxReplicas: 10
   cooldownPeriod: 300
   advanced:
@@ -24,12 +38,7 @@ spec:
   triggers:
   - type: kafka
     metadata:
-      # 💡 1. 핵심: ConfigMap의 카프카 설정과 동일하게 멀티 브로커 엔드포인트를 모두 명시하여 고가용성 확보
       bootstrapServers: "teamn-prod-msk-broker1.xxxxxx.ap-northeast-2.amazonaws.com:9092,teamn-prod-msk-broker2.xxxxxx.ap-northeast-2.amazonaws.com:9092"
       consumerGroup: notification-group
       topic: chat.message.created
-      lagThreshold: "100" # 소비 지연 메시지가 100개 이상 쌓이면 오토스케일링 발동
-
-# ---
-# 💡 추후 카프카 메시지 기반 스케일링이 필요한 다른 마이크로서비스가 있다면 
-# 아래에 YAML 구분선(---)을 쓰고 추가 ScaledObject를 정의하시면 됩니다.
+      lagThreshold: "100"

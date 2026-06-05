@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: talkking-env
+  namespace: talkking-prod
+data:
+  SPRING_DATASOURCE_URL: "jdbc:mysql://teamn-prod-db-cluster.xxxxxx.ap-northeast-2.rds.amazonaws.com:3306/talkking?serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
+  SPRING_DATA_REDIS_CLUSTER_NODES: "teamn-prod-redis-cluster.xxxxxx.clustercfg.ap-northeast-2.cache.amazonaws.com:6379"
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: "teamn-prod-msk-broker1.xxxxxx.ap-northeast-2.amazonaws.com:9092,teamn-prod-msk-broker2.xxxxxx.ap-northeast-2.amazonaws.com:9092"
