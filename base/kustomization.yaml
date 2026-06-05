@@ -3,7 +3,7 @@ kind: Kustomization
 
 # 💡 1. 프로젝트 전체 자원을 쉽게 필터링하고 모니터링하기 위한 공통 라벨 자동 주입
 commonLabels:
-  project: officetalk
+  project: talkking
 
 # 이 베이스 팩에 포함될 마이크로서비스 리소스 목록
 resources:

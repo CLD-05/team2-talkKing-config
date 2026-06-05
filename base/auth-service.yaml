@@ -22,16 +22,16 @@ spec:
     spec:
       containers:
       - name: auth-service
-        image: officetalk-auth:latest
+        image: talkking-auth:latest
         ports:
         - containerPort: 8080
           name: http
         envFrom:
         - configMapRef:
-            name: officetalk-env
+            name: talkking-env
         # AWS Secrets Manager 연동 결과물인 K8s Secret 주입
         - secretRef:
-            name: officetalk-db-secret
+            name: talkking-db-secret
         resources:
           requests:
             cpu: "250m"

@@ -22,15 +22,15 @@ spec:
     spec:
       containers:
       - name: chat-service
-        image: officetalk-chat:latest
+        image: talkking-chat:latest
         ports:
         - containerPort: 8081
           name: websocket
         envFrom:
         - configMapRef:
-            name: officetalk-env
+            name: talkking-env
         - secretRef:
-            name: officetalk-db-secret
+            name: talkking-db-secret
         resources:
           requests:
             cpu: "250m"
