@@ -2,8 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-service
-  namespace: officetalk-prod
+  name: auth-service # base에 선언된 디플로이먼트 이름과 맵핑 (kustomization.yaml이 네임스페이스를 일괄 자동 패치합니다)
 spec:
   template:
     spec:
@@ -17,13 +16,12 @@ spec:
             app: auth
       containers:
       - name: auth-service
-        image: xxxxxxxxxxxx.dkr.ecr.ap-northeast-2.amazonaws.com/officetalk-auth:prod-stable # 운영 고정 이미지 태그
+        image: xxxxxxxxxxxx.dkr.ecr.ap-northeast-2.amazonaws.com/talkking-auth:prod-stable # 💡 프로젝트명 talkking 반영
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: chat-service
-  namespace: officetalk-prod
 spec:
   template:
     spec:
@@ -36,4 +34,4 @@ spec:
             app: chat
       containers:
       - name: chat-service
-        image: xxxxxxxxxxxx.dkr.ecr.ap-northeast-2.amazonaws.com/officetalk-chat:prod-stable
+        image: xxxxxxxxxxxx.dkr.ecr.ap-northeast-2.amazonaws.com/talkking-chat:prod-stable # 💡 프로젝트명 talkking 반영

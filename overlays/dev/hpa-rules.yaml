@@ -1,14 +1,41 @@
-# dev HPA / AutoScaling Rules
+# dev HPA / AutoScaling Rules - Auth Service
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: auth-service-hpa
-  namespace: officetalk-dev
+  namespace: talkking-dev # 💡 1. 네임스페이스 talkking 통일
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: auth-service
+  minReplicas: 1
+  maxReplicas: 3          # 개발 환경에 맞게 적절한 상한선 유지
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70 # 💡 연산 부하를 고려해 임계치를 75에서 70으로 살짝 고도화
+  - type: Resource        # 💡 2. 자바 애플리케이션 특성을 고려한 메모리 메트릭 추가
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80 # 메모리 사용률 80% 달성 시에도 스케일 아웃 수행
+---
+# dev HPA / AutoScaling Rules - Chat Service
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: chat-service-hpa
+  namespace: talkking-dev # 💡 네임스페이스 talkking 통일
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: chat-service
   minReplicas: 1
   maxReplicas: 3
   metrics:
@@ -17,4 +44,31 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 75
+        averageUtilization: 70
+  - type: Resource        # 웹소켓 커넥션 누적에 대비한 메모리 스케일링 세팅
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+---
+# dev HPA / AutoScaling Rules - Frontend Service (Nginx)
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: frontend-service-hpa
+  namespace: talkking-dev # 💡 네임스페이스 talkking 통일
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: frontend-service
+  minReplicas: 1
+  maxReplicas: 2          # 정적 서버이므로 최대 대수를 2대로 콤팩트하게 제한
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80 # Nginx는 가벼우므로 CPU 80% 기준으로 넉넉하게 트리거 잡기

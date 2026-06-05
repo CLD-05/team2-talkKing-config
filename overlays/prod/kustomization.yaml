@@ -1,14 +1,18 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: officetalk-prod
+# 💡 1. 프로젝트 명명 규칙에 맞게 운영 환경 네임스페이스 수정
+namespace: talkking-prod
 
+# 공통 뼈대(base)와 현재 운영 환경 폴더에 있는 리소스들을 하나로 묶어 조립합니다.
 resources:
   - ../../base
-  - ./configmap-env.yaml
-  - ./externalsecret-db.yaml
-  - ./ingress.yaml
-  - ./hpa-rules.yaml
+  # 💡 2. Kustomize 컨벤션에 맞춰 현재 폴더의 파일명 경로 포맷 정돈
+  - configmap-env.yaml
+  - externalsecret-db.yaml
+  - ingress.yaml
+  - hpa-rules.yaml
 
+# 운영 환경 특성에 맞게 특정 서비스의 상세 스펙을 덮어쓸 패치 파일 연결
 patches:
-  - path: ./patches.yaml
+  - path: patches.yaml
