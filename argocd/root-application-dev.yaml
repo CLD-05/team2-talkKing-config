@@ -1,1 +1,26 @@
-# ArgoCD Root App - DEV
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: talkking-dev-root
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    # 팀 저장소 주소에 맞게 수립
+    repoURL: 'https://github.com/likelion-itlab/team2-talkKing-config.git'
+    # 기본 브랜치가 dev이므로 HEAD 대신 명확하게 dev 브랜치를 바라보도록 설정합니다.
+    #targetRevision: dev
+    targetRevision: HEAD
+    path: overlays/dev
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: talkking-dev # dev 타겟 네임스페이스 자동 지정
+  syncPolicy:
+    automated:
+      prune: true     # Git에서 파일 삭제 시 클러스터에서도 동적 삭제
+      selfHeal: true  # 클러스터 내 수동 변경 발생 시 Git 기준으로 원복
+    syncOptions:
+      - CreateNamespace=true # ★ overlays/dev에 namespace.yaml이 없으므로 자동 생성 활성화
+      - ApplyOutOfSyncOnly=true
