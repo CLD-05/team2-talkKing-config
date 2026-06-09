@@ -12,3 +12,12 @@ resources:
   - services/auth/deployment-hpa.yaml
   - services/chat/deployment-hpa.yaml
   - services/frontend/deployment-hpa.yaml
+
+images:
+  - name: talkking-chat
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/chat-service
+    newTag: latest
+  
+  - name: talkking-notification
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/notification-service
+    newTag: latest
