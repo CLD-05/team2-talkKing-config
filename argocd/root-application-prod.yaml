@@ -1,1 +1,22 @@
-# ArgoCD Root App - PROD
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: talkking-prod-root
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/likelion-itlab/team2-talkKing-config.git'
+    targetRevision: main # prod 환경은 main 브랜치 기준으로 명확히 고정
+    path: overlays/prod
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: talkking-prod # prod 타겟 네임스페이스
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true # ★ prod 환경 역시 자동 생성 활성화
