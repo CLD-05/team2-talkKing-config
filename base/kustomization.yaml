@@ -5,17 +5,17 @@ kind: Kustomization
 namespace: talkking-dev
 
 resources:
-  - ../../base
+  - ../../base/kustomization.yaml
   - global-config.yaml
   - middleware-endpoints.yaml
   - credential-secrets.yaml
   - network-ingress.yaml
-  - services/auth/deployment-hpa.yaml
-  - services/chat/deployment-hpa.yaml
-  - services/frontend/deployment-hpa.yaml
+  - service/auth/deployment-hpa.yaml
+  - service/chat/deployment-hpa.yaml
+  - service/frontend/deployment-hpa.yaml
   # 👇 아래 두 줄이 새로 추가되어야 합니다.
-  - services/notification/deployment.yaml
-  - services/ai-analyzer/deployment.yaml
+  - service/notification/deployment.yaml
+  - service/ai-analyzer/deployment.yaml
 
 images:
   - name: talkking-chat
