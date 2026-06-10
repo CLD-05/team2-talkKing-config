@@ -15,7 +15,8 @@ spec:
     path: overlays/prod 
   destination:
     server: 'https://kubernetes.default.svc' 
-    namespace: prod # EKS 안에서 prod 환경이 배포될 네임스페이스
+    # namespace: prod # EKS 안에서 prod 환경이 배포될 네임스페이스
+    talkking-prod # 👈 기존 prod에서 talkking-prod로 통일!
   syncPolicy:
     automated:
       prune: true 

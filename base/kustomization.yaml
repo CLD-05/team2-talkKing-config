@@ -1,29 +1,11 @@
-# team2-talkKing-config/overlays/dev/kustomization.yaml
+# team2-talkKing-config/base/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: talkking-dev
-
+# 주의: base에는 namespace를 적지 않습니다! (overlay에서 주입)
 resources:
-  - ../../base/kustomization.yaml
-  - global-config.yaml
-  - middleware-endpoints.yaml
-  - credential-secrets.yaml
-  - network-ingress.yaml
-  - service/auth/deployment-hpa.yaml
-  - service/chat/deployment-hpa.yaml
-  - service/frontend/deployment-hpa.yaml
-  # 👇 아래 두 줄이 새로 추가되어야 합니다.
-  - service/notification/deployment.yaml
-  - service/ai-analyzer/deployment.yaml
-
-images:
-  - name: talkking-chat
-    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/chat-service
-    newTag: latest
-  
-  - name: talkking-notification
-    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/notification-service
-    newTag: latest
-    
-  # ai-analyzer 이미지 정보도 추후 이곳에 추가하시면 됩니다.
+  - auth-service.yaml
+  - chat-service.yaml
+  - frontend-service.yaml
+  - notification-service.yaml
+  - ai-analyzer-service.yaml

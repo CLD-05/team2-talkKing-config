@@ -15,7 +15,7 @@ spec:
     path: overlays/dev 
   destination:
     server: 'https://kubernetes.default.svc' 
-    namespace: dev # EKS 안에서 dev 환경이 배포될 네임스페이스
+    namespace: talkking-dev # EKS 안에서 dev 환경이 배포될 네임스페이스
   syncPolicy:
     automated:
       prune: true 

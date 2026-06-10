@@ -1,3 +1,4 @@
+# team2-talkKing-config/overlays/prod/service/frontend/deployment-policy.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:

@@ -18,3 +18,8 @@ spec:
             #     secretKeyRef:
             #       name: credential-secrets
             #       key: slack-webhook
+
+          # 👇 아래 세 줄을 추가하여 ExternalSecret과 연결합니다!
+          envFrom:
+            - secretRef:
+                name: ai-error-analyzer-secret

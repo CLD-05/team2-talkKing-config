@@ -1,0 +1,25 @@
+# team2-talkKing-config/overlays/prod/service/ai-analyzer/deployment-policy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-analyzer
+spec:
+  template:
+    spec:
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfied: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: ai-analyzer
+      containers:
+        - name: ai-analyzer
+          # 👇 사용자님 팀의 공통 AWS 계정 주소로 완벽하게 덮어씌웠습니다!
+          image: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/ai-analyzer:prod-stable
+          env:
+            - name: ENVIRONMENT
+              value: "prod"
+          envFrom:
+            - secretRef:
+                name: ai-error-analyzer-secret

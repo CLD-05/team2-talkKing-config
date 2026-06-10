@@ -1,3 +1,4 @@
+# team2-talkKing-config/overlays/prod/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -7,9 +8,12 @@ resources:
   - ../../base
   - global-config.yaml
   - middleware-endpoints.yaml
-  - credential-secrets.yaml
+  # - credential-secrets.yaml
+  - externalsecret.yaml # db 설정 파일명 수정
   - network-ingress.yaml
-  - services/auth/deployment-policy.yaml
-  - services/chat/deployment-policy.yaml
-  - services/frontend/deployment-policy.yaml
-  - services/notification/deployment-keda.yaml
+  - service/auth/deployment-policy.yaml
+  - service/chat/deployment-policy.yaml
+  - service/frontend/deployment-policy.yaml
+  - service/notification/deployment-keda.yaml
+  - service/ai-analyzer/deployment-policy.yaml
+  - service/ai-analyzer/externalsecret.yaml # 👈 Prod용 시크릿 추가!
