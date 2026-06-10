@@ -1,26 +1,24 @@
+# ArgoCD Root App - DEV
+# team2-talkKing-config/argocd/root-application-dev.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: talkking-dev-root
+  name: team2-root-dev
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io # 리소스 삭제 시 깔끔하게 정리해주는 옵션 (추가)
 spec:
   project: default
   source:
-    # 팀 저장소 주소에 맞게 수립
-    repoURL: 'https://github.com/likelion-itlab/team2-talkKing-config.git'
-    # 기본 브랜치가 dev이므로 HEAD 대신 명확하게 dev 브랜치를 바라보도록 설정합니다.
-    #targetRevision: dev
-    targetRevision: HEAD
-    path: overlays/dev
+    repoURL: 'https://github.com/CLD-05/team2-talkKing-config' # 👈 우리 팀의 Config 깃허브 주소
+    targetRevision: HEAD 
+    path: overlays/dev 
   destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: talkking-dev # dev 타겟 네임스페이스 자동 지정
+    server: 'https://kubernetes.default.svc' 
+    namespace: dev # EKS 안에서 dev 환경이 배포될 네임스페이스
   syncPolicy:
     automated:
-      prune: true     # Git에서 파일 삭제 시 클러스터에서도 동적 삭제
-      selfHeal: true  # 클러스터 내 수동 변경 발생 시 Git 기준으로 원복
+      prune: true 
+      selfHeal: true 
     syncOptions:
-      - CreateNamespace=true # ★ overlays/dev에 namespace.yaml이 없으므로 자동 생성 활성화
-      - ApplyOutOfSyncOnly=true
+      - CreateNamespace=true # ★ dev 네임스페이스가 없으면 자동으로 만들어주는 아주 좋은 옵션 (추가)

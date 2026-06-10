@@ -1,0 +1,31 @@
+# team2-talkKing-config/base/notification-service.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: talkking-notification
+spec:
+  selector:
+    matchLabels:
+      app: talkking-notification
+  template:
+    metadata:
+      labels:
+        app: talkking-notification
+    spec:
+      containers:
+        - name: talkking-notification
+          image: talkking-notification # kustomization.yaml에서 실제 ECR 주소로 덮어씌워집니다.
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: talkking-notification-svc
+spec:
+  selector:
+    app: talkking-notification
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

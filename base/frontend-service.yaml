@@ -1,4 +1,5 @@
 # Base: Frontend Deployment + Service
+# team2-talkKing-config/base/frontend-service.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:

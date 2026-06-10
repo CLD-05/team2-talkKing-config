@@ -1,22 +1,24 @@
+# ArgoCD Root App - PROD
+# team2-talkKing-config/argocd/root-application-prod.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: talkking-prod-root
+  name: team2-root-prod
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io # 리소스 삭제 시 깔끔하게 정리해주는 옵션 (추가)
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/likelion-itlab/team2-talkKing-config.git'
-    targetRevision: main # prod 환경은 main 브랜치 기준으로 명확히 고정
-    path: overlays/prod
+    repoURL: 'https://github.com/CLD-05/team2-talkKing-config' # 👈 우리 팀의 Config 깃허브 주소
+    targetRevision: HEAD 
+    path: overlays/prod 
   destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: talkking-prod # prod 타겟 네임스페이스
+    server: 'https://kubernetes.default.svc' 
+    namespace: prod # EKS 안에서 prod 환경이 배포될 네임스페이스
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: true 
+      selfHeal: true 
     syncOptions:
-      - CreateNamespace=true # ★ prod 환경 역시 자동 생성 활성화
+      - CreateNamespace=true # ★ prod 네임스페이스가 없으면 자동으로 만들어주는 아주 좋은 옵션 (추가)

@@ -1,17 +1,29 @@
+# team2-talkKing-config/overlays/dev/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-# 💡 1. 프로젝트 전체 자원을 쉽게 필터링하고 모니터링하기 위한 공통 라벨 자동 주입
-commonLabels:
-  project: talkking
+namespace: talkking-dev
 
-# 이 베이스 팩에 포함될 마이크로서비스 리소스 목록
 resources:
-  - frontend-service.yaml
-  - auth-service.yaml
-  - chat-service.yaml
+  - ../../base
+  - global-config.yaml
+  - middleware-endpoints.yaml
+  - credential-secrets.yaml
+  - network-ingress.yaml
+  - services/auth/deployment-hpa.yaml
+  - services/chat/deployment-hpa.yaml
+  - services/frontend/deployment-hpa.yaml
+  # 👇 아래 두 줄이 새로 추가되어야 합니다.
+  - services/notification/deployment.yaml
+  - services/ai-analyzer/deployment.yaml
+
+images:
+  - name: talkking-chat
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/chat-service
+    newTag: latest
   
-  # 💡 2. 일관된 네이밍 규칙(서비스명-service.yaml) 가이드 주석 정돈
-  # 추후 서비스 확장 시 아래 파일들을 생성하고 리스트에 추가하면 됩니다.
-  # - notification-service.yaml
-  # - ai-service.yaml
+  - name: talkking-notification
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/notification-service
+    newTag: latest
+    
+  # ai-analyzer 이미지 정보도 추후 이곳에 추가하시면 됩니다.

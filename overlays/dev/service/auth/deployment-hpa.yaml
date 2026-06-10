@@ -1,3 +1,4 @@
+# team2-talkKing-config/overlays/dev/service/auth/deployment-hpa.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,7 +8,7 @@ spec:
     spec:
       containers:
       - name: auth-service
-        image: "762131618818.dkr.ecr.ap-northeast-2.amazonaws.com/talkking-auth:dev-1.0"
+        image: "495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/talkking-auth:dev-1.0"
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
