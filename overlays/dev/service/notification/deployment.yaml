@@ -1,0 +1,19 @@
+# team2-talkKing-config/overlays/dev/service/notification/deployment.yaml
+# dev 환경용 설정 (replicas 1개로 고정, 리소스 제한)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: talkking-notification
+spec:
+  replicas: 1 # Dev 환경이므로 1개만 띄웁니다.
+  template:
+    spec:
+      containers:
+        - name: talkking-notification
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"

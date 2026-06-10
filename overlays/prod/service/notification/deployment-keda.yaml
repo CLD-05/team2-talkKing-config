@@ -1,3 +1,4 @@
+# team2-talkKing-config/overlays/prod/service/notification/deployment-keda.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -38,6 +39,7 @@ spec:
   triggers:
   - type: kafka
     metadata:
+      # 👇 이곳에 있는 xxxxxx
       bootstrapServers: "teamn-prod-msk-broker1.xxxxxx.ap-northeast-2.amazonaws.com:9092,teamn-prod-msk-broker2.xxxxxx.ap-northeast-2.amazonaws.com:9092"
       consumerGroup: notification-group
       topic: chat.message.created

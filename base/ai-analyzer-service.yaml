@@ -1,0 +1,31 @@
+# team2-talkKing-config/base/ai-analyzer-service.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-analyzer
+spec:
+  selector:
+    matchLabels:
+      app: ai-analyzer
+  template:
+    metadata:
+      labels:
+        app: ai-analyzer
+    spec:
+      containers:
+        - name: ai-analyzer
+          image: ai-analyzer-image # 추후 실제 이미지명으로 변경
+          ports:
+            - containerPort: 5000 # Python/Flask 등 사용 포트에 맞게 수정
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-analyzer-svc
+spec:
+  selector:
+    app: ai-analyzer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
