@@ -17,6 +17,10 @@ spec:
         architecture: standalone
         replicaCount: 1
 
+        # 🎯 [오류 수정]: Bitnami 차트 버그를 우회하기 위해 검증된 이미지 태그를 강제로 지정합니다.
+        image:
+          tag: 4.0.8-debian-12-r0
+
         auth:
           username: talkking
           existingPasswordSecret: rabbitmq-secret
