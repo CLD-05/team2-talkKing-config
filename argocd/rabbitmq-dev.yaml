@@ -17,6 +17,10 @@ spec:
         architecture: standalone
         replicaCount: 1
 
+        # 🎯 [교정 핵심]: 다른 주요 옵션들과 세로 라인(들여쓰기)을 일치시켰습니다.
+        image:
+          tag: "4.0"
+
         auth:
           username: talkking
           existingPasswordSecret: rabbitmq-secret
