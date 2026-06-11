@@ -1,4 +1,3 @@
-# team2-talkKing-config/overlays/prod/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -8,12 +7,24 @@ resources:
   - ../../base
   - global-config.yaml
   - middleware-endpoints.yaml
-  # - credential-secrets.yaml
-  - externalsecret.yaml # db 설정 파일명 수정
+  - externalsecret-db.yaml
   - network-ingress.yaml
-  - service/auth/deployment-policy.yaml
-  - service/chat/deployment-policy.yaml
-  - service/frontend/deployment-policy.yaml
-  - service/notification/deployment-keda.yaml
-  - service/ai-analyzer/deployment-policy.yaml
-  - service/ai-analyzer/externalsecret.yaml # 👈 Prod용 시크릿 추가!
+  - service/notification/scaledobject.yaml
+  - service/ai-analyzer/externalsecret.yaml
+  - service/ai-analyzer/rbac.yaml
+
+patches:
+  - path: service/chat/deployment-patch.yaml
+  - path: service/notification/deployment-patch.yaml
+  - path: service/ai-analyzer/deployment-patch.yaml
+
+images:
+  - name: talkking-chat
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/chat-service
+    newTag: 70bc61d1282aa0fb22c9908d8feed3570da39ae0
+  - name: talkking-notification
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/notification-service
+    newTag: 70bc61d1282aa0fb22c9908d8feed3570da39ae0
+  - name: ai-error-analyzer
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/ai-error-analyzer
+    newTag: 70bc61d1282aa0fb22c9908d8feed3570da39ae0

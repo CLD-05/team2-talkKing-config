@@ -1,8 +1,9 @@
-# team2-talkKing-config/base/ai-analyzer-service.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ai-analyzer
+  labels:
+    app: ai-analyzer
 spec:
   selector:
     matchLabels:
@@ -14,18 +15,46 @@ spec:
     spec:
       containers:
         - name: ai-analyzer
-          image: ai-analyzer-image # 추후 실제 이미지명으로 변경
+          image: ai-error-analyzer:latest
           ports:
-            - containerPort: 5000 # Python/Flask 등 사용 포트에 맞게 수정
+            - containerPort: 8082
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8082
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8082
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: ai-analyzer-svc
+  labels:
+    app: ai-analyzer
 spec:
   selector:
     app: ai-analyzer
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5000
+      targetPort: 8082
+      name: http
+  type: ClusterIP

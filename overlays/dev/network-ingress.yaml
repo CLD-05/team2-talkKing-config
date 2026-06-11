@@ -1,43 +1,23 @@
-# dev Ingress (AWS ALB)
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: talkking-dev-ingress # 💡 1. 프로젝트 이름 반영
-  namespace: talkking-dev    # 💡 1. 네임스페이스 통일
+  name: talkking-dev-ingress
+  namespace: talkking-dev
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-
-    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=3600
-    # 🎯 [웹소켓 필수] 다중 파드 환경에서 웹소켓 세션이 찢어지지 않도록 고정
-    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.type=lb_cookie,stickiness.lb_cookie.duration_seconds=86400
-    # dev 환경 도메인이 승인되면 ACM 인증서 ARN을 연동합니다.
-    # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:xxxx:certificate/xxxx
-    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=3600
+    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.type=lb_cookie,stickiness.lb_cookie.duration_seconds=86400
 spec:
   rules:
-  - http:
-      paths:
-      - path: /api/v1/auth
-        pathType: Prefix
-        backend:
-          service:
-            name: auth-service
-            port:
-              number: 80 # 💡 2. 수정된 서비스 외부 노출 포트(80)에 바인딩
-      - path: /ws
-        pathType: Prefix
-        backend:
-          service:
-            name: chat-service
-            port:
-              number: 80 # 💡 2. 수정된 서비스 외부 노출 포트(80)에 바인딩
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: frontend-service
-            port:
-              number: 80 # 💡 기존 서비스 포트(80) 유지
+    - http:
+        paths:
+          - path: /ws
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-service
+                port:
+                  number: 80

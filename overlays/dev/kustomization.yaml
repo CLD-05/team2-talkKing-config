@@ -1,10 +1,10 @@
-# team2-talkKing-config/overlays/dev/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: talkking-dev
 
 resources:
+<<<<<<< Updated upstream
 - ../../base
 - global-config.yaml
 - middleware-endpoints.yaml
@@ -27,3 +27,30 @@ images:
 - name: talkking-notification
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/notification-service
   newTag: 70bc61d1282aa0fb22c9908d8feed3570da39ae0
+=======
+  - ../../base
+  - global-config.yaml
+  - middleware-endpoints.yaml
+  - middleware-rabbitmq-secret.yaml
+  - credential-secrets.yaml
+  - network-ingress.yaml
+  - service/chat/hpa.yaml
+  - service/ai-analyzer/externalsecret.yaml
+  - service/ai-analyzer/rbac.yaml
+
+patches:
+  - path: service/chat/deployment-patch.yaml
+  - path: service/notification/deployment.yaml
+  - path: service/ai-analyzer/deployment-patch.yaml
+
+images:
+  - name: talkking-chat
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/chat-service
+    newTag: 70bc61d1282aa0fb22c9908d8feed3570da39ae0
+  - name: talkking-notification
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/notification-service
+    newTag: 70bc61d1282aa0fb22c9908d8feed3570da39ae0
+  - name: ai-error-analyzer
+    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/ai-error-analyzer
+    newTag: 70bc61d1282aa0fb22c9908d8feed3570da39ae0
+>>>>>>> Stashed changes

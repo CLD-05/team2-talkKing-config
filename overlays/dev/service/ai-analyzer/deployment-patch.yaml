@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-analyzer
+spec:
+  replicas: 1
+  template:
+    spec:
+      serviceAccountName: ai-error-analyzer
+      containers:
+        - name: ai-analyzer
+          env:
+            - name: ENVIRONMENT
+              value: dev
+          envFrom:
+            - secretRef:
+                name: ai-error-analyzer-secret

@@ -4,8 +4,6 @@ kind: Kustomization
 
 # 주의: base에는 namespace를 적지 않습니다! (overlay에서 주입)
 resources:
-  - auth-service.yaml
   - chat-service.yaml
-  - frontend-service.yaml
   - notification-service.yaml
   - ai-analyzer-service.yaml

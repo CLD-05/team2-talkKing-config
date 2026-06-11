@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-analyzer
+spec:
+  replicas: 2
+  template:
+    spec:
+      serviceAccountName: ai-error-analyzer
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfied: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: ai-analyzer
+      containers:
+        - name: ai-analyzer
+          env:
+            - name: ENVIRONMENT
+              value: prod
+          envFrom:
+            - secretRef:
+                name: ai-error-analyzer-secret
