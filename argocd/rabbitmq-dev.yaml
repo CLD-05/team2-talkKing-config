@@ -17,6 +17,13 @@ spec:
 
     helm:
       values: |
+        global:
+          security:
+            allowInsecureImages: true
+          imageRegistry: docker.io
+          imageRepository: bitnamilegacy/rabbitmq
+          imageTag: 4.1.3-debian-12-r1
+
         fullnameOverride: rabbitmq-service
 
         architecture: standalone
@@ -26,10 +33,19 @@ spec:
           existingPasswordSecret: rabbitmq-secret
           existingSecretPasswordKey: rabbitmq-password
 
+        # [버전 통일 완료]
         image:
           registry: docker.io
-          repository: bitnami/rabbitmq
-          tag: 4.3.0
+          repository: bitnamilegacy/rabbitmq
+          tag: 4.1.3-debian-12-r1
+
+        # ⏱️ 래빗MQ가 완전히 켜질 때까지 쿠버네티스가 차분히 기다려주도록 프로브 지연 추가
+        readinessProbe:
+          enabled: true
+          initialDelaySeconds: 120
+        livenessProbe:
+          enabled: true
+          initialDelaySeconds: 120
 
         persistence:
           enabled: false
