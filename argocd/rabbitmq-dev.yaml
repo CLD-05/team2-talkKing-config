@@ -7,17 +7,25 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
+
   source:
-    repoURL: https://charts.bitnami.com/bitnami
+    repoURL: oci://registry-1.docker.io/bitnamicharts
     chart: rabbitmq
+
+    # 실제 최신 차트 버전으로 지정
     targetRevision: 16.0.6
+
     helm:
       values: |
         global:
           security:
             allowInsecureImages: true
+          imageRegistry: docker.io
+          imageRepository: bitnamilegacy/rabbitmq
+          imageTag: 4.1.3-debian-12-r1
 
         fullnameOverride: rabbitmq-service
+
         architecture: standalone
 
         auth:
@@ -25,10 +33,19 @@ spec:
           existingPasswordSecret: rabbitmq-secret
           existingSecretPasswordKey: rabbitmq-password
 
+        # 🎯 [버전 통일 완료]: 글로벌 설정과 똑같이 레거시 방의 실존하는 버전으로 맞춰줍니다.
         image:
           registry: docker.io
           repository: bitnamilegacy/rabbitmq
           tag: 4.1.3-debian-12-r1
+
+        # ⏱️ 래빗MQ가 완전히 켜질 때까지 쿠버네티스가 차분히 기다려주도록 프로브 지연 추가
+        readinessProbe:
+          enabled: true
+          initialDelaySeconds: 120
+        livenessProbe:
+          enabled: true
+          initialDelaySeconds: 120
 
         persistence:
           enabled: false
@@ -38,15 +55,19 @@ spec:
 
         metrics:
           enabled: true
+
           serviceMonitor:
             enabled: true
             namespace: monitoring
+
   destination:
     server: https://kubernetes.default.svc
     namespace: talkking-dev
+
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+
     syncOptions:
       - CreateNamespace=true

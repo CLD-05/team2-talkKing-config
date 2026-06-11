@@ -16,7 +16,7 @@ spec:
         - name: talkking-notification
           image: talkking-notification # kustomization.yaml에서 실제 ECR 주소로 덮어씌워집니다.
           ports:
-            - containerPort: 8080
+            - containerPort: 8081
 ---
 apiVersion: v1
 kind: Service
@@ -28,4 +28,4 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: 8081
