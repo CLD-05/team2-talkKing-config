@@ -14,7 +14,17 @@ spec:
   rules:
     - http:
         paths:
+          # 1. [기존 스펙] 웹소켓 및 채팅 데이터 통로
           - path: /ws
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-service
+                port:
+                  number: 80
+
+          # 2. 🔥 [무조건 추가해야 하는 부분] 내장 로그인 화면 및 정적 파일 통로
+          - path: /
             pathType: Prefix
             backend:
               service:
