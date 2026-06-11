@@ -17,9 +17,9 @@ spec:
         architecture: standalone
         replicaCount: 1
 
-        # 🎯 [오류 수정]: Bitnami 차트 버그를 우회하기 위해 검증된 이미지 태그를 강제로 지정합니다.
+        # 🎯 [교정 핵심]: 다른 주요 옵션들과 세로 라인(들여쓰기)을 일치시켰습니다.
         image:
-          tag: 4.0.8-debian-12-r0
+          tag: "4.0"
 
         auth:
           username: talkking
