@@ -8,7 +8,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.bitnami.com/bitnami
+    # 🛡️ [보안 통과]: 방화벽에 막히는 깃허브 주소 대신, 안전한 공식 OCI 주소로 복구하여 보안을 통과합니다.
+    repoURL: registry-1.docker.io/bitnamicharts
     chart: rabbitmq
     targetRevision: "*"
     helm:
@@ -16,6 +17,12 @@ spec:
         fullnameOverride: rabbitmq-service
         architecture: standalone
         replicaCount: 1
+
+        # 🎯 [레거시 저장소 강제 지정]: 도커 허브의 레거시 보관소 주소로 우회합니다.
+        image:
+          registry: docker.io
+          repository: bitnami/rabbitmq
+          tag: 4.0.9-0-r01
 
         auth:
           username: talkking
@@ -33,11 +40,6 @@ spec:
           serviceMonitor:
             enabled: true
             namespace: monitoring
-
-      # 세로 라인은 위쪽의 'values:' 와 똑같이 맞춰주시면 됩니다.
-      parameters:
-        - name: image.tag
-          value: "4.1.3-0-r01"
   destination:
     server: https://kubernetes.default.svc
     namespace: talkking-dev
