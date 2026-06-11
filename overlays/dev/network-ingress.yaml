@@ -23,7 +23,16 @@ spec:
                 port:
                   number: 80
 
-          # 2. 🔥 [무조건 추가해야 하는 부분] 내장 로그인 화면 및 정적 파일 통로
+          # 3. 🔥 [추가 필수] 실시간 알림 웹소켓용 통로 대개방!
+          - path: /ws-notif
+            pathType: Prefix
+            backend:
+              service:
+                name: chat-service
+                port:
+                  number: 80
+
+          # 2. [기존 스펙] 내장 로그인 화면 및 정적 파일 통로 (맨 아래에 두는 것이 정석)
           - path: /
             pathType: Prefix
             backend:
