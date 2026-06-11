@@ -4,7 +4,10 @@ metadata:
   name: talkking-env
   namespace: talkking-dev
 data:
-  SPRING_DATASOURCE_URL: "jdbc:mysql://teamn-dev-db.xxxxxx.ap-northeast-2.rds.amazonaws.com:3306/talkking?serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
-  SPRING_DATA_REDIS_HOST: "teamn-dev-redis.xxxxxx.ng.0001.ap-northeast-2.cache.amazonaws.com"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://team2-talkking-dev-db.cne4w2cys26c.ap-northeast-2.rds.amazonaws.com:3306/talkking?serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
+  SPRING_DATA_REDIS_HOST: "team2-talkking-dev-redis.9iaedf.ng.0001.apn2.cache.amazonaws.com"
   SPRING_DATA_REDIS_PORT: "6379"
-  SPRING_KAFKA_BOOTSTRAP_SERVERS: "teamn-dev-kafka.xxxxxx.ap-northeast-2.amazonaws.com:9092"
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: ""
+  SPRING_RABBITMQ_HOST: "rabbitmq-service"
+  SPRING_RABBITMQ_PORT: "5672"
+  SPRING_RABBITMQ_USERNAME: "talkking"

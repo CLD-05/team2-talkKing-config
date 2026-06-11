@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: team2-rabbitmq-dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: rabbitmq
+    targetRevision: "*"
+    helm:
+      values: |
+        fullnameOverride: rabbitmq-service
+        architecture: standalone
+        replicaCount: 1
+
+        auth:
+          username: talkking
+          existingPasswordSecret: rabbitmq-secret
+          existingSecretPasswordKey: rabbitmq-password
+
+        persistence:
+          enabled: false
+
+        service:
+          type: ClusterIP
+
+        metrics:
+          enabled: true
+          serviceMonitor:
+            enabled: true
+            namespace: monitoring
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: talkking-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
