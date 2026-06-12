@@ -25,7 +25,8 @@ images:
   newTag: ffb29cc2a728076c68bf4ae45144caf4b8df2536
 - name: talkking-chat
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/chat-service
-  newTag: ffb29cc2a728076c68bf4ae45144caf4b8df2536
+  newTag: ffb29cc2a728076c68bf4ae45144caf4b8df2538
+  # newTag: ffb29cc2a728076c68bf4ae45144caf4b8df2536 
 - name: talkking-notification
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/notification-service
   newTag: ffb29cc2a728076c68bf4ae45144caf4b8df2536
