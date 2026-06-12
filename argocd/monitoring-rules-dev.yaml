@@ -1,0 +1,23 @@
+# ArgoCD Application - dev alert rules and alert routing
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: team2-monitoring-rules-dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/CLD-05/team2-talkKing-config
+    targetRevision: HEAD
+    path: monitoring/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
