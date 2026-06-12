@@ -2,6 +2,7 @@ apiVersion: monitoring.coreos.com/v1alpha1
 kind: AlertmanagerConfig
 metadata:
   name: talkking-dev-ai-error-analyzer
+  namespace: talkking-dev
   labels:
     alertmanagerConfig: talkking-dev
     release: kube-prometheus-stack
@@ -15,10 +16,6 @@ spec:
     groupWait: 30s
     groupInterval: 5m
     repeatInterval: 3h
-    matchers:
-      - name: namespace
-        value: talkking-dev
-        matchType: =
   receivers:
     - name: ai-error-analyzer
       webhookConfigs:
