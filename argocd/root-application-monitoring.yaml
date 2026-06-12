@@ -1,4 +1,4 @@
-# team2-talkKing-config/argocd/root-application-monitoring.yaml
+# ArgoCD Application - monitoring stack
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -7,38 +7,26 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://prometheus-community.github.io/helm-charts'
-    targetRevision: 57.2.0 
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: 57.2.0
     chart: kube-prometheus-stack
     helm:
-      values:
-        # 1. 그라파나 관리자 비밀번호 및 접속 주소 설정
+      values: |
         grafana:
-          adminPassword: "admin" # 💡 실서버 오픈 전에 꼭 복잡한 비밀번호로 변경하세요!
-          ingress:
-            enabled: true
-            ingressClassName: alb
-            hosts:
-              - grafana.talkking-service.com # 💡 추후 도메인 확정 시 변경!
-        
-        # 2. 프로메테우스 알람(Alertmanager)을 AI 분석기로 쏴주는 설정
+          adminPassword: admin
+
+        prometheus:
+          prometheusSpec:
+            ruleSelectorNilUsesHelmValues: false
+            ruleSelector: {}
+            ruleNamespaceSelector: {}
+
         alertmanager:
-          config:
-            receivers:
-              - name: 'ai-analyzer-webhook'
-                webhook_configs:
-                  # =========================================================================
-                  # 🚨 [TODO: 인프라 팀원에게 확인받을 것!] 🚨
-                  # ai-analyzer 서버가 에러 데이터를 받을 "정확한 끝자리 주소(API 경로)"를 물어보세요.
-                  # (예: /analyze, /webhook, /api/alert 등)
-                  # 답변을 받으시면 아래 주소 맨 끝의 <요기_수정> 부분을 지우고 알맞게 적어주세요!
-                  # =========================================================================
-                  - url: 'http://ai-analyzer-svc.talkking-prod.svc.cluster.local:80/<요기_수정>'
-            
-            route:
-              receiver: 'ai-analyzer-webhook'
+          alertmanagerSpec:
+            alertmanagerConfigSelector: {}
+            alertmanagerConfigNamespaceSelector: {}
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: https://kubernetes.default.svc
     namespace: monitoring
   syncPolicy:
     automated:
