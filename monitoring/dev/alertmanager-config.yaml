@@ -4,6 +4,7 @@ metadata:
   name: talkking-dev-ai-error-analyzer
   labels:
     alertmanagerConfig: talkking-dev
+    release: kube-prometheus-stack
 spec:
   route:
     receiver: ai-error-analyzer
