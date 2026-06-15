@@ -12,6 +12,13 @@ spec:
           env:
             - name: ENVIRONMENT
               value: dev
+            # ✅ Redis 환경변수 추가
+            - name: REDIS_HOST
+              value: "team2-talkking-dev-redis.9iaedf.ng.0001.apn2.cache.amazonaws.com"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_PASSWORD
+              value: ""  # ← 암호가 없으니 빈 값
           envFrom:
             - secretRef:
                 name: ai-error-analyzer-secret
