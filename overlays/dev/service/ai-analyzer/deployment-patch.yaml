@@ -18,7 +18,24 @@ spec:
             - name: REDIS_PORT
               value: "6379"
             - name: REDIS_PASSWORD
-              value: ""  # ← 암호가 없으니 빈 값
+              value: ""
+
+            # 🚀 추가: 슬랙 알림 이력용 Postgres DB 설정
+            - name: ALERT_DATASOURCE_URL
+              # 테라폼 outputs.tf의 'alert_history_db_endpoint' 값 주입
+              value: "jdbc:postgresql://team2-talkking-dev-alert-history-db.xxxxxx.ap-northeast-2.rds.amazonaws.com:5432/errorops"
+            - name: ALERT_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: talkking-db-secret # target.name에 적은 이름
+                  key: ALERT_DB_USERNAME   # secretKey에 적은 이름
+            - name: ALERT_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: talkking-db-secret
+                  key: ALERT_DB_PASSWORD
+
+          # 📦 기존 Secret 통째 주입 설정 (기존 유지)
           envFrom:
             - secretRef:
                 name: ai-error-analyzer-secret
