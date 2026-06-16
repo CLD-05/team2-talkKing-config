@@ -30,7 +30,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: talkking-db-secret
-                  key: ALERT_DATASOURCE_USERNAME # 👈 ALERT_DB_USERNAME에서 ALERT_DATASOURCE_USERNAME으로 변경!
+                  key: ALERT_DB_USERNAME # 👈 ALERT_DB_USERNAME에서 ALERT_DATASOURCE_USERNAME으로 변경!
             
             - name: ALERT_DB_PASSWORD
               valueFrom:
