@@ -12,10 +12,9 @@ spec:
           env:
             - name: ENVIRONMENT
               value: dev
-              
-            # ✅ Redis 환경변수 (기존 유지)
+            # ✅ Redis 환경변수 (올바른 엔드포인트!)
             - name: REDIS_HOST
-              value: "team2-talkking-dev-redis-001.9iaedf.0001.apn2.cache.amazonaws.com"
+              value: "team2-talkking-dev-redis.9iaedf.ng.0001.apn2.cache.amazonaws.com"
             - name: REDIS_PORT
               value: "6379"
             - name: REDIS_PASSWORD
