@@ -13,6 +13,7 @@ resources:
 - service/chat/hpa.yaml
 - service/ai-analyzer/externalsecret.yaml
 - service/ai-analyzer/rbac.yaml
+- service/ai-analyzer/servicemonitor.yaml
 
 patches:
 - path: service/chat/deployment-patch.yaml
