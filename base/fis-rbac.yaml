@@ -11,9 +11,7 @@ metadata:
   namespace: talkking-dev
 rules:
   - apiGroups: [""]
-    # 💡 pods/exec에 접근하여 내부 명령을 실행해야 하므로 둘 다 유지합니다.
     resources: ["pods", "pods/exec", "pods/status", "namespaces"]
-    # 💡 핵심: "create"를 추가해야 Latency와 CPU 부하 실험 시 Pod 내부로 진입(Exec)할 수 있습니다!
     verbs: ["get", "list", "watch", "delete", "create", "patch", "update"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -28,4 +26,31 @@ subjects:
 roleRef:
   kind: Role
   name: fis-pod-modifier
+  apiGroup: rbac.authorization.k8s.io
+---
+# 💡 EKS 순정 환경에 맞춘 클러스터 레벨 권한 보정
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: fis-privileged-cluster-role
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/exec"]
+    verbs: ["create", "get", "list", "watch"]
+  # 💡 EKS 노드 및 cgroup 제어 프록시를 위한 노드 권한 확보
+  - apiGroups: [""]
+    resources: ["nodes", "nodes/proxy"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: fis-privileged-cluster-role-binding
+subjects:
+  - kind: ServiceAccount
+    name: fis-experiment
+    namespace: talkking-dev
+roleRef:
+  kind: ClusterRole
+  name: fis-privileged-cluster-role
   apiGroup: rbac.authorization.k8s.io
