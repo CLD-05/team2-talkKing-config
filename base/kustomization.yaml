@@ -7,3 +7,4 @@ resources:
   - chat-service.yaml
   - notification-service.yaml
   - ai-analyzer-service.yaml
+  - fis-rbac.yaml
