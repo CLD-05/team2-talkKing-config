@@ -11,10 +11,16 @@ metadata:
   namespace: talkking-dev
 rules:
   - apiGroups: [""]
-    resources: ["pods", "pods/exec", "pods/status", "namespaces"]
+    resources:
+      - pods
+      - pods/exec
+      - pods/status
+      - pods/ephemeralcontainers
     verbs: ["get", "list", "watch", "delete", "create", "patch", "update"]
   - apiGroups: [""]
-    resources: ["configmaps"]
+    resources:
+      - configmaps
+      - events
     verbs: ["get", "list", "watch", "create", "patch", "update", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -31,21 +37,21 @@ roleRef:
   name: fis-pod-modifier
   apiGroup: rbac.authorization.k8s.io
 ---
-# 💡 EKS 순정 환경에 맞춘 클러스터 레벨 권한 보정
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: fis-privileged-cluster-role
 rules:
   - apiGroups: [""]
-    resources: ["pods", "pods/exec"]
-    verbs: ["create", "get", "list", "watch"]
-  # 💡 EKS 노드 및 cgroup 제어 프록시를 위한 노드 권한 확보
-  - apiGroups: [""]
-    resources: ["nodes", "nodes/proxy"]
+    resources:
+      - namespaces
+      - nodes
+      - nodes/proxy
     verbs: ["get", "list", "watch"]
   - apiGroups: ["apps"]
-    resources: ["daemonsets", "deployments"]
+    resources:
+      - daemonsets
+      - deployments
     verbs: ["get", "list", "watch", "create", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
