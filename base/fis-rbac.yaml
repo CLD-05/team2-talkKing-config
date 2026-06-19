@@ -9,6 +9,9 @@ kind: Role
 metadata:
   name: fis-pod-modifier
   namespace: talkking-dev
+  annotations:
+    # FIS IAM 역할의 권한이 Pod에 주입
+    eks.amazonaws.com/role-arn: arn:aws:iam::495599735720:role/team2-talkking-dev-fis-role
 rules:
   - apiGroups: [""]
     resources: ["pods", "pods/exec", "pods/status", "namespaces"]
