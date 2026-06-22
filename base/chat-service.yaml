@@ -73,3 +73,20 @@ spec:
   selector:
     app: chat
   type: ClusterIP
+---
+#
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: chat-service-monitor
+  namespace: talkking-dev
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: chat
+  endpoints:
+  - port: http
+    path: /actuator/prometheus
+    interval: 10s
