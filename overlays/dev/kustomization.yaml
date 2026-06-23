@@ -23,10 +23,10 @@ patches:
 images:
 - name: ai-error-analyzer
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/ai-error-analyzer
-  newTag: ddf7c2d311ffa059f1061793ef7c499e891a3406
+  newTag: d25b57bb0228e65f1b7829ae0feeba058bb74f0b
 - name: talkking-chat
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/chat-service
-  newTag: ddf7c2d311ffa059f1061793ef7c499e891a3406
+  newTag: d25b57bb0228e65f1b7829ae0feeba058bb74f0b
 - name: talkking-notification
   newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/notification-service
-  newTag: ddf7c2d311ffa059f1061793ef7c499e891a3406
+  newTag: d25b57bb0228e65f1b7829ae0feeba058bb74f0b
