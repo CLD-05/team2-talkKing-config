@@ -16,6 +16,8 @@ spec:
         - name: chat-service
           envFrom:
             - configMapRef:
+                name: talkking-global-env
+            - configMapRef:
                 name: talkking-env
             - secretRef:
                 name: talkking-db-secret
