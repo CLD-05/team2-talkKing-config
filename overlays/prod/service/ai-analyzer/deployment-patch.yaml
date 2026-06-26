@@ -10,7 +10,7 @@ spec:
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
-          whenUnsatisfied: ScheduleAnyway
+          whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
               app: ai-analyzer
@@ -19,6 +19,24 @@ spec:
           env:
             - name: ENVIRONMENT
               value: prod
+            - name: REDIS_HOST
+              value: "team2-talkking-prod-redis.9iaedf.ng.0001.apn2.cache.amazonaws.com"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_PASSWORD
+              value: ""
+            - name: ALERT_DATASOURCE_URL
+              value: "jdbc:postgresql://team2-talkking-prod-alert-history-db.cne4w2cys26c.ap-northeast-2.rds.amazonaws.com:5432/errorops"
+            - name: ALERT_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: talkking-db-secret
+                  key: ALERT_DB_USERNAME
+            - name: ALERT_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: talkking-db-secret
+                  key: ALERT_DB_PASSWORD
           envFrom:
             - secretRef:
                 name: ai-error-analyzer-secret
