@@ -7,9 +7,9 @@ resources:
   - ../../base
   - global-config.yaml
   - middleware-endpoints.yaml
+  - middleware-rabbitmq-secret.yaml
   - externalsecret-db.yaml
   - network-ingress.yaml
-  - service/notification/scaledobject.yaml
   - service/ai-analyzer/externalsecret.yaml
   - service/ai-analyzer/rbac.yaml
 
