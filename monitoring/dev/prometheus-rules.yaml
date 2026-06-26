@@ -38,3 +38,33 @@ spec:
           annotations:
             summary: "Pod is not healthy"
             description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has been in phase {{ $labels.phase }} for more than 5 minutes."
+
+        # Detect high ALB target response latency for the TalkKing ingress.
+        - alert: TalkkingServiceSlowResponse
+          expr: sum(rate(aws_alb_target_response_time_seconds_sum{ingress="talkking-dev-ingress"}[5m])) / clamp_min(sum(rate(aws_alb_target_response_time_seconds_count{ingress="talkking-dev-ingress"}[5m])), 1) > 2
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "ALB target response time is high"
+            description: "Ingress {{ $labels.ingress }} average response time is over 2s (currently {{ $value | printf \"%.2f\" }}s)."
+
+        # Detect high backend 5XX error rate on the TalkKing ingress.
+        - alert: TalkkingHighHttp5xxErrorRate
+          expr: (sum(rate(aws_alb_elb_httpcode_backend_5xx_sum{ingress="talkking-dev-ingress"}[5m])) / clamp_min(sum(rate(aws_alb_elb_requests_sum{ingress="talkking-dev-ingress"}[5m])), 1)) * 100 > 5
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "High HTTP 5XX error rate on AWS ALB"
+            description: "Ingress {{ $labels.ingress }} backend 5XX error rate is {{ $value | printf \"%.2f\" }}%."
+
+        # Detect pods using more than 85 percent of their memory limit.
+        - alert: TalkkingPodMemorySquatting
+          expr: (sum(container_memory_working_set_bytes{namespace="talkking-dev",container!=""}) by (pod) / clamp_min(sum(kube_pod_container_resource_limits{namespace="talkking-dev",resource="memory"}) by (pod), 1)) * 100 > 85
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod memory usage is critically high"
+            description: "Pod {{ $labels.pod }} is using more than 85% of its memory limit."
