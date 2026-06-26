@@ -16,6 +16,8 @@ spec:
         - name: talkking-notification
           envFrom:
             - configMapRef:
+                name: talkking-global-env
+            - configMapRef:
                 name: talkking-env
             - secretRef:
                 name: rabbitmq-secret

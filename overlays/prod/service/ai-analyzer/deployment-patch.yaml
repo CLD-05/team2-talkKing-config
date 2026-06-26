@@ -38,5 +38,7 @@ spec:
                   name: talkking-db-secret
                   key: ALERT_DB_PASSWORD
           envFrom:
+            - configMapRef:
+                name: talkking-global-env
             - secretRef:
                 name: ai-error-analyzer-secret
