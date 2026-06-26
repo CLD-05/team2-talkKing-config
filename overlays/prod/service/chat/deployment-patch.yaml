@@ -8,9 +8,16 @@ spec:
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
-          whenUnsatisfied: ScheduleAnyway
+          whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
               app: chat
       containers:
         - name: chat-service
+          envFrom:
+            - configMapRef:
+                name: talkking-env
+            - secretRef:
+                name: talkking-db-secret
+            - secretRef:
+                name: rabbitmq-secret

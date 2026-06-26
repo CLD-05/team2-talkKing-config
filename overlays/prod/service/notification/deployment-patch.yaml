@@ -8,9 +8,21 @@ spec:
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: topology.kubernetes.io/zone
-          whenUnsatisfied: ScheduleAnyway
+          whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
               app: talkking-notification
       containers:
         - name: talkking-notification
+          envFrom:
+            - configMapRef:
+                name: talkking-env
+            - secretRef:
+                name: rabbitmq-secret
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
