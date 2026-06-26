@@ -53,8 +53,7 @@ spec:
         metrics:
           enabled: true
           serviceMonitor:
-            enabled: true
-            namespace: monitoring
+            enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: talkking-prod
