@@ -4,28 +4,28 @@ kind: Kustomization
 namespace: talkking-prod
 
 resources:
-  - ../../base
-  - global-config.yaml
-  - middleware-endpoints.yaml
-  - middleware-rabbitmq-secret.yaml
-  - externalsecret-db.yaml
-  - network-ingress.yaml
-  - service/ai-analyzer/externalsecret.yaml
-  - service/ai-analyzer/rbac.yaml
-  - service/ai-analyzer/servicemonitor.yaml
+- ../../base
+- global-config.yaml
+- middleware-endpoints.yaml
+- middleware-rabbitmq-secret.yaml
+- externalsecret-db.yaml
+- network-ingress.yaml
+- service/ai-analyzer/externalsecret.yaml
+- service/ai-analyzer/rbac.yaml
+- service/ai-analyzer/servicemonitor.yaml
 
 patches:
-  - path: service/chat/deployment-patch.yaml
-  - path: service/notification/deployment-patch.yaml
-  - path: service/ai-analyzer/deployment-patch.yaml
+- path: service/chat/deployment-patch.yaml
+- path: service/notification/deployment-patch.yaml
+- path: service/ai-analyzer/deployment-patch.yaml
 
 images:
-  - name: talkking-chat
-    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/chat-service
-    newTag: 1f55cc49dd40d1b720ff275bfeb80d5f1e1d4a7e
-  - name: talkking-notification
-    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/notification-service
-    newTag: 1f55cc49dd40d1b720ff275bfeb80d5f1e1d4a7e
-  - name: ai-error-analyzer
-    newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/ai-error-analyzer
-    newTag: 1f55cc49dd40d1b720ff275bfeb80d5f1e1d4a7e
+- name: ai-error-analyzer
+  newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/ai-error-analyzer
+  newTag: 77728692a24937bfcfc1d066d1296d90f793d919
+- name: talkking-chat
+  newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/chat-service
+  newTag: 77728692a24937bfcfc1d066d1296d90f793d919
+- name: talkking-notification
+  newName: 495599735720.dkr.ecr.ap-northeast-2.amazonaws.com/team2-talkking/notification-service
+  newTag: 77728692a24937bfcfc1d066d1296d90f793d919
