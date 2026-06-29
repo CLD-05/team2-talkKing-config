@@ -1,0 +1,70 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: talkking-prod-alert-rules
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: talkking-prod.pod.rules
+      rules:
+        # Detect containers that remain in CrashLoopBackOff.
+        - alert: TalkkingPodCrashLooping
+          expr: max_over_time(kube_pod_container_status_waiting_reason{namespace="talkking-prod",reason="CrashLoopBackOff"}[5m]) > 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Pod is crash looping"
+            description: "Pod {{ $labels.pod }} container {{ $labels.container }} in namespace {{ $labels.namespace }} is in CrashLoopBackOff."
+
+        # Detect containers that restart at least three times in ten minutes.
+        - alert: TalkkingPodHighRestartRate
+          expr: increase(kube_pod_container_status_restarts_total{namespace="talkking-prod"}[10m]) >= 3
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod container restarted repeatedly"
+            description: "Pod {{ $labels.pod }} container {{ $labels.container }} in namespace {{ $labels.namespace }} restarted at least 3 times in 10 minutes."
+
+        # Detect pods that remain in Failed, Pending, or Unknown phase.
+        - alert: TalkkingPodNotReady
+          expr: max_over_time(kube_pod_status_phase{namespace="talkking-prod",phase=~"Failed|Pending|Unknown"}[10m]) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod is not healthy"
+            description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has been in phase {{ $labels.phase }} for more than 5 minutes."
+
+        # Detect high ALB target response latency for the prod ingress.
+        - alert: TalkkingServiceSlowResponse
+          expr: sum(rate(aws_alb_target_response_time_seconds_sum{ingress="talkking-prod-ingress"}[5m])) / clamp_min(sum(rate(aws_alb_target_response_time_seconds_count{ingress="talkking-prod-ingress"}[5m])), 1) > 2
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "ALB target response time is high"
+            description: "Ingress {{ $labels.ingress }} average response time is over 2s (currently {{ $value | printf \"%.2f\" }}s)."
+
+        # Detect a backend 5XX rate above five percent on the prod ingress.
+        - alert: TalkkingHighHttp5xxErrorRate
+          expr: (sum(rate(aws_alb_elb_httpcode_backend_5xx_sum{ingress="talkking-prod-ingress"}[5m])) / clamp_min(sum(rate(aws_alb_elb_requests_sum{ingress="talkking-prod-ingress"}[5m])), 1)) * 100 > 5
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "High HTTP 5XX error rate on AWS ALB"
+            description: "Ingress {{ $labels.ingress }} backend 5XX error rate is {{ $value | printf \"%.2f\" }}%."
+
+        # Detect pods using more than 85 percent of their memory limit.
+        - alert: TalkkingPodMemorySquatting
+          expr: (sum(container_memory_working_set_bytes{namespace="talkking-prod",container!=""}) by (pod) / clamp_min(sum(kube_pod_container_resource_limits{namespace="talkking-prod",resource="memory"}) by (pod), 1)) * 100 > 85
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod memory usage is critically high"
+            description: "Pod {{ $labels.pod }} is using more than 85% of its memory limit."
