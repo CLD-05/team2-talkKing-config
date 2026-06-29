@@ -12,6 +12,7 @@ resources:
   - network-ingress.yaml
   - service/ai-analyzer/externalsecret.yaml
   - service/ai-analyzer/rbac.yaml
+  - service/ai-analyzer/servicemonitor.yaml
 
 patches:
   - path: service/chat/deployment-patch.yaml
