@@ -79,7 +79,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: chat-service-monitor
-  namespace: talkking-dev
+  namespace: talkking-prod
   labels:
     release: kube-prometheus-stack
 spec:
