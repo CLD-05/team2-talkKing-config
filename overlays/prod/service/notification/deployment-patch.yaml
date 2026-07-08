@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: talkking-notification
+spec:
+  template:
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: talkking-notification
+      containers:
+        - name: talkking-notification
+          envFrom:
+            - configMapRef:
+                name: talkking-global-env
+            - configMapRef:
+                name: talkking-env
+            - secretRef:
+                name: rabbitmq-secret
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"

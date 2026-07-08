@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: talkking-dev-ai-error-analyzer
+  namespace: talkking-dev
+  labels:
+    alertmanagerConfig: talkking-dev
+    release: kube-prometheus-stack
+spec:
+  route:
+    receiver: ai-error-analyzer
+    groupBy:
+      - alertname
+      - namespace
+      - pod
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 3h
+  receivers:
+    - name: ai-error-analyzer
+      webhookConfigs:
+        - url: http://ai-analyzer-svc.talkking-dev.svc.cluster.local:80/api/v1/alerts
+          sendResolved: true

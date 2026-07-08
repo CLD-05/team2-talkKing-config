@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: talkking-global-env
+  namespace: talkking-prod
+data:
+  SPRING_PROFILES_ACTIVE: "prod"

@@ -1,0 +1,10 @@
+# team2-talkKing-config/base/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# 주의: base에는 namespace를 적지 않습니다! (overlay에서 주입)
+resources:
+  - chat-service.yaml
+  - notification-service.yaml
+  - ai-analyzer-service.yaml
+  - fis-rbac.yaml

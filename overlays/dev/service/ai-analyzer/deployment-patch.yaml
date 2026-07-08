@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-analyzer
+spec:
+  replicas: 1
+  template:
+    spec:
+      serviceAccountName: ai-error-analyzer
+      containers:
+        - name: ai-analyzer
+          env:
+            - name: ENVIRONMENT
+              value: dev
+            # ✅ Redis 환경변수 (올바른 엔드포인트!)
+            - name: REDIS_HOST
+              value: "team2-talkking-dev-redis.9iaedf.ng.0001.apn2.cache.amazonaws.com"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_PASSWORD
+              value: ""
+
+            # 추가: 슬랙 알림 이력용 Postgres DB 설정
+            - name: ALERT_DATASOURCE_URL
+              # 테라폼 outputs.tf의 'alert_history_db_endpoint' 값 주입
+              value: "jdbc:postgresql://team2-talkking-dev-alert-history-db.cne4w2cys26c.ap-northeast-2.rds.amazonaws.com:5432/errorops"
+            #  수정 완료:
+            - name: ALERT_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: talkking-db-secret
+                  key: ALERT_DB_USERNAME # 👈 ALERT_DB_USERNAME에서 ALERT_DATASOURCE_USERNAME으로 변경!
+            
+            - name: ALERT_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: talkking-db-secret
+                  key: ALERT_DB_PASSWORD         # 👈 패스워드는 양쪽 다 ALERT_DB_PASSWORD로 일치하므로 그대로 유지!
+
+          # 📦 기존 Secret 통째 주입 설정 (기존 유지)
+          envFrom:
+            - secretRef:
+                name: ai-error-analyzer-secret
